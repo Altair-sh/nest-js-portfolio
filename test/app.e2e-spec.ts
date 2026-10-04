@@ -4,7 +4,7 @@ import request from 'supertest'
 import { App } from 'supertest/types.js'
 import { AppModule } from './../src/app.module.js'
 
-describe('AppController (e2e)', () => {
+describe('AppResolver (e2e)', () => {
     let app: INestApplication<App>
 
     beforeEach(async () => {
@@ -16,11 +16,21 @@ describe('AppController (e2e)', () => {
         await app.init()
     })
 
-    it('/ (GET)', () => {
+    it('hello (query)', () => {
         return request(app.getHttpServer())
-            .get('/')
+            .post('/graphql')
+            .send({ query: '{ hello }' })
             .expect(200)
-            .expect('Hello World!')
+            .expect({ data: { hello: 'Hello World!' } })
+    })
+
+    it('serves Apollo Sandbox', () => {
+        return request(app.getHttpServer())
+            .get('/graphql')
+            .set('Accept', 'text/html')
+            .expect(200)
+            .expect('Content-Type', /text\/html/)
+            .expect(/embeddable-sandbox/)
     })
 
     afterEach(async () => {
