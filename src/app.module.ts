@@ -2,12 +2,14 @@ import { Module } from '@nestjs/common'
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { GraphQLModule } from '@nestjs/graphql'
+import * as gql from 'graphql'
 import { AppResolver } from './app.resolver.js'
 import { AppService } from './app.service.js'
-import * as gql from 'graphql'
+import { LoggerModule } from './logger/logger.module.js'
 
 @Module({
     imports: [
+        LoggerModule,
         GraphQLModule.forRoot<ApolloDriverConfig>({
             driver: ApolloDriver,
             // generate schema.gql in memory
