@@ -3,6 +3,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { GraphQLModule } from '@nestjs/graphql'
 import * as gql from 'graphql'
+import { IndexController } from './index.controller.js'
 import { LoggerModule } from './logger/logger.module.js'
 import { ProfileModule } from './profile/profile.module.js'
 
@@ -27,10 +28,19 @@ import { ProfileModule } from './profile/profile.module.js'
                         gql.parse(`query ExampleQuery {
                             profile {
                                 name
+                                headline
                                 description
-                                skills { name }
-                                experience { company position }
-                                projects { name }
+                                links { label url }
+                                education { label place year certificateUrl }
+                                skills { name level }
+                                experience {
+                                    company
+                                    position
+                                    description
+                                    startDate { year month day }
+                                    endDate { year month day }
+                                }
+                                projects { name description url technologies }
                             }
                         }`)
                     ),
@@ -38,5 +48,6 @@ import { ProfileModule } from './profile/profile.module.js'
             ],
         }),
     ],
+    controllers: [IndexController],
 })
 export class AppModule {}

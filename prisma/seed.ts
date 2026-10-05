@@ -126,7 +126,7 @@ await prisma.profile.create({
                     name: 'Samruk Kazyna ERP',
                     url: 'https://github.com/Altair-sh/samruk-erp',
                     description:
-                        'A storage system for report files (excel, csv, etc.) with online viewing. It has AI assistant answering questions about the context obtained using vector search. It was created for the Samruk-Kazyna Foundation, which manages state-owned companies in Kazakhstan',
+                        'My diploma project. A storage system for report files (excel, csv, etc.) with online viewing. It has AI assistant answering questions about the context obtained using vector search. It was created for the Samruk-Kazyna Foundation, which manages state-owned companies in Kazakhstan',
                     technologies: [
                         'FastAPI',
                         'NextJS',

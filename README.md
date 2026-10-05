@@ -13,6 +13,11 @@ Web API that serves my resume data
 - **oxlint** - static code analysis
 - **prettier** -  and code formatting
 
+## Running deployments
+- <img src="https://cdn.simpleicons.org/railway/000000/ffffff" height="16"> [**Railway**](https://railway.com/) - https://nest-js-portfolio.up.railway.app/
+
+- <img src="https://cdn.simpleicons.org/render/000000/ffffff" height="16"> [**Render**](https://render.com/) - https://nest-js-portfolio.onrender.com/
+
 ## Install dependencies
 ```sh
 npm ci
@@ -48,6 +53,21 @@ Open http://localhost:3000/graphql
 7. Save and deploy. On start the container creates the tables and fills them from `prisma/seed.ts`.
 8. In the app service open **Settings** -> **Networking** -> **Generate Domain**.
 9. Open `https://<domain>/graphql` to see Apollo Sandbox.
+
+### Deployment on Render
+1. go to https://render.com
+2. click **new** -> **Postgres**, choose a name and region, click **create database**.
+3. On the database page click **connect** -> **internal** and copy the **Internal Database URL**.
+4. Click **new** -> **web service** -> select the GitHub repository.
+   Render finds the `Dockerfile` and sets language to **Docker**.
+5. Choose the same region as the database, so the internal URL works.
+6. In **environment variables** add:
+    - **Name:** `DATABASE_URL`
+    - **Value:** the Internal Database URL from step 3
+7. Click **deploy web service**. On start the container creates the tables and fills them from `prisma/seed.ts`.
+8. Open `https://<service-name>.onrender.com/graphql` to see Apollo Sandbox.
+
+On the free plan the app sleeps after 15 minutes without requests, so the first request after that takes about a minute. The free database is deleted after 30 days.
 
 
 ## Run in development mode

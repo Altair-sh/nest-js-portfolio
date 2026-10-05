@@ -71,6 +71,14 @@ describe('ProfileResolver (e2e)', () => {
             .expect(/embeddable-sandbox/)
     })
 
+    it('serves index page with link to Apollo Sandbox', () => {
+        return request(app.getHttpServer())
+            .get('/')
+            .expect(200)
+            .expect('Content-Type', /text\/html/)
+            .expect(/\/graphql/)
+    })
+
     it('query profile', () => {
         const query = `{
             profile {
