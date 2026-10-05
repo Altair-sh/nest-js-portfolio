@@ -1,19 +1,26 @@
-# Build stage: install node_modules and pack them with src in dist/main.js
-FROM node:26-alpine AS builder
-WORKDIR /app
-# Install dependencies before source code.
-# If source code changes, `docker build` will use cached dependencies
-COPY package.json package-lock.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
-
-# Runtime stage: only Node + dist/main.js, no node_modules
 FROM node:26-alpine
-ENV NODE_ENV=production
 WORKDIR /app
-COPY --from=builder /app/dist/main.js ./main.js
-# non-root user provided by the node image
+COPY . .
+# build and remove dev dependencies in one step, 
+# so deleted files don't stay in the image.
+# 1. install packages exactly as in package-lock.json
+# 2. build dist/
+# 3. remove packages needed only for building
+# 4. remove download caches
+RUN npm ci \
+    && npm run build \
+    && npm prune --omit=dev \
+    && npm cache clean --force \
+    && rm -rf /root/.cache
+# switch to non root user to run the app (is created in base image)
 USER node
 EXPOSE 3000
-CMD ["node", "main.js"]
+ENV NODE_ENV=production
+# 1. create or update tables in db
+# 2. drop data and fill db
+# 3. start the app
+CMD [ "/bin/sh" , "-c", "\
+    npx prisma migrate deploy && \
+    npx prisma db seed && \
+    exec node --enable-source-maps dist/main.js\
+"]

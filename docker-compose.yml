@@ -4,7 +4,8 @@ services:
     ports:
       - '3000:3000'
     environment:
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/app
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/nest-js-portfolio
+      PORT: 3000
     depends_on:
       db:
         condition: service_healthy
@@ -14,13 +15,13 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: app
+      POSTGRES_DB: nest-js-portfolio
     ports:
       - '5432:5432'
     volumes:
       - pgdata:/var/lib/postgresql
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres -d app']
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d nest-js-portfolio']
       start_period: 30s    # startup period
       start_interval: 3s   # how often to check during startup
       interval: 60s        # how often to check after startup

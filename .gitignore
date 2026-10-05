@@ -1,8 +1,13 @@
-# Nestjs specific
-/dist
+# js and ts
 /node_modules
+/out
+/dist
 /build
+*.tsbuildinfo
+
+# temp
 /tmp
+/temp
 
 # Logs
 logs
@@ -22,3 +27,6 @@ lerna-debug.log*
 # temp directory
 .temp
 .tmp
+
+# Prisma client
+/src/generated

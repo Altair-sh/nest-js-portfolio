@@ -1,0 +1,76 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Profile {
+  id          Int          @id @default(autoincrement())
+  name        String
+  headline    String
+  description String?
+  links       Link[]
+  skills      Skill[]
+  experience  Experience[]
+  projects    Project[]
+  education   Education[]
+}
+
+model Link {
+  id        Int     @id @default(autoincrement())
+  profileId Int
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  label     String
+  url       String
+}
+
+enum SkillLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+model Skill {
+  id        Int        @id @default(autoincrement())
+  profileId Int
+  profile   Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  name      String
+  level     SkillLevel
+}
+
+model Experience {
+  id          Int       @id @default(autoincrement())
+  profileId   Int
+  profile     Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  company     String
+  position    String
+  description String?
+  startDate   DateTime  @db.Date
+  // null means the job is current
+  endDate     DateTime? @db.Date
+}
+
+model Project {
+  id           Int      @id @default(autoincrement())
+  profileId    Int
+  profile      Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  name         String
+  description  String?
+  url          String?
+  technologies String[]
+}
+
+model Education {
+  id             Int     @id @default(autoincrement())
+  profileId      Int
+  profile        Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  label          String
+  place          String
+  year           Int
+  certificateUrl String?
+}
